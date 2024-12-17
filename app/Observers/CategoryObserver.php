@@ -20,7 +20,7 @@ class CategoryObserver
      */
     public function updated(Category $category): void
     {
-        //
+        Cache::forget('categories');
     }
 
     /**
@@ -28,7 +28,7 @@ class CategoryObserver
      */
     public function deleted(Category $category): void
     {
-        //
+        Cache::forget('categories');
     }
 
     /**
@@ -36,7 +36,7 @@ class CategoryObserver
      */
     public function restored(Category $category): void
     {
-        //
+        Cache::forget('categories');
     }
 
     /**
@@ -44,6 +44,6 @@ class CategoryObserver
      */
     public function forceDeleted(Category $category): void
     {
-        //
+        Cache::forget('categories');
     }
 }

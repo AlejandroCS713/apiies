@@ -37,6 +37,8 @@ class CategoryTest extends TestCase
         $response = $this->actingAs($user)
             ->postJson(route('categories.store'), $category);
 
+        dd($response->getContent());
+
         $response->assertStatus(201)
             ->assertJson(['data' => Arr::only($category, ['id', 'name'])]);
     }
