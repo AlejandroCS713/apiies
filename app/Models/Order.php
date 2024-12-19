@@ -20,10 +20,6 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
-    // Relación con los productos (opcional, si los pedidos tienen productos)
-    public function products()
-    {
-        return $this->belongsToMany(Product::class)->withPivot('quantity'); // Si usas tabla intermedia
-    }
+
 }
 
