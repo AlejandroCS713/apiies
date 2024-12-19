@@ -50,6 +50,7 @@ class ProductController extends Controller
 
     public function show($id)
     {
+        abort_if(!auth()->user()->tokenCan('products-show'), 403);
         $product = Product::with('category')->findOrFail($id);
 
         return new ProductResource($product);
