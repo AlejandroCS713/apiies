@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use Illuminate\Support\Str;
+
 
 class ProductController extends Controller
 {
@@ -18,17 +20,22 @@ class ProductController extends Controller
 
     public function store(StoreProductRequest $request)
     {
-        // Si llegamos aquí, los datos ya están validados
+        abort_if(! auth()->user()->tokenCan('products-create'), 403, 'No tienes permisos para crear un producto');
+
+        $data = $request->validated();
+
+        // Manejo de la foto (si existe)
+        if ($request->hasFile('photo')) {
+            $file = $request->file('photo');
+            $name = Str::uuid() . '.' . $file->extension();
+            $file->storeAs('categories', $name, 'public');
+            $data['photo'] = $name;
+        }
 
         // Crear el producto
-        $product = Product::create([
-            'category_id' => $request->category_id,
-            'name' => $request->name,
-            'description' => $request->description,
-            'price' => $request->price * 100,  // Guardamos el precio en centavos
-        ]);
+        $product = Product::create($data);
 
-        // Retornar el producto creado usando ProductResource
+        // Retornar el producto creado usando ProductResource, incluyendo la URL completa de la foto
         return new ProductResource($product);
     }
 }
